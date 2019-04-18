@@ -1,0 +1,36 @@
+service:
+  message:
+    text: hello
+    simple : hello2
+
+one:
+  value: 3
+
+another:
+  value : 5
+
+some:
+  value: d
+
+---
+spring:
+  profiles:
+    active: "development"
+service:
+  message :
+    text : "hello"
+---
+
+spring:
+  profiles: "development"
+service:
+  message:
+    text : "hi"
+---
+
+spring:
+  profiles: "production"
+service:
+  message:
+    text: "welcome"
+
