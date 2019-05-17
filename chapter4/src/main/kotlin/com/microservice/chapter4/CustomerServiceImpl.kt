@@ -18,7 +18,7 @@ class CustomerServiceImpl : CustomerService {
     }
     val customers = ConcurrentHashMap<Int,Customer>(initialCustomers.associateBy(Customer::id))
 
-    override fun getCustomer(id: Int) = customers[id]?.toMono()
+    override fun getCustomer(id: Int) = customers[id]?.toMono()?: Mono.empty()
 
     override fun searchCustomer(nameFilter: String): Flux<Customer> =
             customers.filter {
@@ -26,10 +26,13 @@ class CustomerServiceImpl : CustomerService {
             }.map(Map.Entry<Int, Customer>::value ).toFlux()
 
 
-    override fun createCustomer(customerMono: Mono<Customer>): Mono<*> =
-        customerMono.map {
-            customers[it.id] = it
-            Mono.empty<Any>() // 빈 객체를 명시적으로 반환 아무것도 입력 안해도 빈객체를 반환함
-        }
+    override fun createCustomer(customerMono: Mono<Customer>): Mono<Customer>  =
+            customerMono.map {
+                customers[it.id]= it // 반 객체0가 반환
+                it //자신 반환
+//                Mono.empty<Any>() // 빈객체를 명시적으로 변환
+            }
+
+
 
 }
